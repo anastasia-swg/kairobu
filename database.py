@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from models import Base 
 
 DATABASE_URL = "postgresql+psycopg://postgres:Bernadette@localhost:5432/kairobu"
@@ -8,7 +8,7 @@ DATABASE_URL = "postgresql+psycopg://postgres:Bernadette@localhost:5432/kairobu"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine, expire_on_commit=False)
 
-def init_db():
-    Base.metadata.create_all(bind=engine)
+
 def get_session():
-    return SessionLocal()
+    with Session(engine) as session:
+        yield session

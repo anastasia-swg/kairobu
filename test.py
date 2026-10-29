@@ -1,15 +1,13 @@
-
 from datetime import date, timedelta
-
 from database import engine
 from models import Base, OrganizerRole, MediaFormat
-
 from crud import users_option, event, organizer_option, statistics
+from fastapi import FastAPI
+from request.test_api import router
 
+app = FastAPI()
 
-# ============================================================
-#  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-# ============================================================
+app.include_router(router)
 
 def reset_db():
     """Пересоздать таблицы. ТОЛЬКО для теста."""
@@ -29,10 +27,6 @@ def section(title: str):
 def sub(title: str):
     print(f"\n--- {title} ---")
 
-
-# ============================================================
-#  СЦЕНАРИЙ 1: ОРГАНИЗАТОР
-# ============================================================
 
 def scenario_organizer():
     section("СЦЕНАРИЙ 1: ОРГАНИЗАТОР")
@@ -228,9 +222,7 @@ def scenario_guest(existing_event_id: int):
 
 if __name__ == "__main__":
     print("\n>>> ТЕСТОВЫЕ СЦЕНАРИИ ЛР №1 <<<")
-
-    # Пересоздать схему — удобно для повторных запусков.
-    # Если хочешь сохранить данные — закомментируй reset_db().
+    
     reset_db()
 
     # Сценарий 1
@@ -238,6 +230,8 @@ if __name__ == "__main__":
 
     # Сценарий 2 — использует мероприятие из первого сценария
     scenario_guest(existing_event_id=ev.id)
+
+
 
     section("ГОТОВО")
     print("Все сценарии выполнены без ошибок.\n")
